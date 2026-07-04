@@ -1,4 +1,3 @@
-<h1>CAMBIO DE PRUEBA 999</h1>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -31,18 +30,14 @@ background:#fff;
 border-radius:22px;
 overflow:hidden;
 box-shadow:0 18px 45px rgba(0,0,0,.12);
-animation:fadeIn .5s ease;
 }
 
-@keyframes fadeIn{
-from{opacity:0; transform:translateY(10px);}
-to{opacity:1; transform:translateY(0);}
-}
-
+/* HEADER */
 .encabezado{
 padding:30px;
 text-align:center;
 border-bottom:1px solid #eee;
+background:#fff;
 }
 
 .encabezado img{
@@ -118,12 +113,7 @@ cursor:pointer;
 transition:.3s;
 }
 
-button:disabled{
-background:#9ad5ac;
-cursor:not-allowed;
-}
-
-button:hover:not(:disabled){
+button:hover{
 background:#117b3b;
 }
 
@@ -136,30 +126,6 @@ align-items:center;
 gap:8px;
 color:#666;
 font-size:14px;
-}
-
-/* LOADER */
-.loader{
-display:none;
-margin:15px auto;
-border:4px solid #eee;
-border-top:4px solid #169347;
-border-radius:50%;
-width:35px;
-height:35px;
-animation:spin 1s linear infinite;
-}
-
-@keyframes spin{
-to{transform:rotate(360deg);}
-}
-
-/* ERROR */
-.error{
-color:#d93025;
-font-size:14px;
-margin-top:10px;
-display:none;
 }
 
 /* IFRAME */
@@ -183,6 +149,7 @@ display:none;
 
 <div class="contenido">
 
+<!-- CHECK SVG -->
 <div class="check">
 <svg viewBox="0 0 24 24" width="50" height="50">
 <path fill="none" stroke="#18a64b" stroke-width="3" d="M5 13l4 4L19 7"/>
@@ -200,73 +167,49 @@ Ingrese su DNI para visualizar su resultado.
 
 <input type="password" id="dni" placeholder="Ingrese su DNI" maxlength="8">
 
-<button id="btn" onclick="abrirPDF()" disabled>Ver Resultado</button>
-
-<div class="loader" id="loader"></div>
-
-<div class="error" id="error">DNI no encontrado</div>
+<button onclick="abrirPDF()">Ver Resultado</button>
 
 <div class="seguridad">
-🔒 Su información está protegida
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#169347" stroke-width="2">
+<rect x="5" y="11" width="14" height="10" rx="2"></rect>
+<path d="M8 11V7a4 4 0 0 1 8 0v4"></path>
+</svg>
+Su información está protegida
 </div>
 
-</div>
-</div>
-
-<iframe id="visor"></iframe>
-
+</
 <script>
-
-const dniInput = document.getElementById("dni");
-const btn = document.getElementById("btn");
-const loader = document.getElementById("loader");
-const error = document.getElementById("error");
-
-/* habilitar botón */
-dniInput.addEventListener("input", () => {
-btn.disabled = dniInput.value.trim().length !== 8;
-error.style.display = "none";
-});
-
-/* ENTER */
-dniInput.addEventListener("keydown", (e) => {
-if(e.key === "Enter" && !btn.disabled){
-abrirPDF();
-}
-});
 
 function abrirPDF(){
 
-const dni = dniInput.value.trim();
+const dni = document.getElementById("dni").value.trim();
 
-/* validar */
-if(dni.length !== 8){
-error.textContent = "DNI debe tener 8 dígitos";
-error.style.display = "block";
+if(dni === ""){
+alert("Por favor ingrese su DNI");
 return;
 }
 
-/* loader */
-loader.style.display = "block";
-btn.disabled = true;
-
-/* simular carga */
-setTimeout(() => {
+if(dni.length !== 8){
+alert("El DNI debe tener 8 dígitos");
+return;
+}
 
 const pdfURL = "resultados/" + dni + ".pdf";
 
-/* aquí podrías validar real si existe */
 document.getElementById("login").style.display = "none";
 
 const visor = document.getElementById("visor");
 visor.style.display = "block";
 visor.src = pdfURL;
 
-loader.style.display = "none";
-
-}, 1200);
-
 }
+
+// ENTER FUNCIONA
+document.getElementById("dni").addEventListener("keydown", function(event){
+if(event.key === "Enter"){
+abrirPDF();
+}
+});
 
 </script>
 
