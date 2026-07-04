@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Escalab | Resultados</title>
+<title>Escalabs | Resultados</title>
 
 <style>
 
@@ -146,7 +146,7 @@ display:none;
 <div class="contenido">
 
 <!-- CHECK -->
-<div class="check">
+<h1>Escalabs</h1>
 <svg viewBox="0 0 24 24" width="52" height="52">
 <path d="M5 13l4 4L19 7"
 fill="none"
@@ -157,7 +157,7 @@ stroke-linejoin="round"/>
 </svg>
 </div>
 
-<h1>Escalab</h1>
+<div class="check">
 
 <div class="subtitulo">Resultados de Laboratorio</div>
 
@@ -202,19 +202,24 @@ const error = document.getElementById("error");
 
 error.style.display = "none";
 
+/* VALIDACIÓN BÁSICA */
 if(dni.length !== 8){
 error.textContent = "El DNI debe tener 8 dígitos";
 error.style.display = "block";
 return;
 }
 
-if(dni !== "70814301"){
+/* DNI AUTORIZADO */
+const dniValido = "70814301";
+
+if(dni !== dniValido){
 error.textContent = "DNI no encontrado";
 error.style.display = "block";
 return;
 }
 
-const pdfURL = "resultados/" + dni + ".pdf";
+/* ABRIR PDF */
+const pdfURL = "resultados/" + dniValido + ".pdf";
 
 document.getElementById("login").style.display = "none";
 
@@ -223,8 +228,3 @@ visor.style.display = "block";
 visor.src = pdfURL;
 
 }
-
-</script>
-
-</body>
-</html>
