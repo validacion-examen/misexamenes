@@ -6,7 +6,6 @@
 <title>Escalab | Resultados</title>
 
 <style>
-
 *{
 margin:0;
 padding:0;
@@ -16,129 +15,132 @@ font-family:Arial,Helvetica,sans-serif;
 
 body{
 background:#eef8f2;
+background-image:radial-gradient(circle at top left,#ffffff,#eef8f2);
 display:flex;
 justify-content:center;
 align-items:center;
-height:100vh;
-padding:20px;
+min-height:100vh;
+padding:25px;
 }
 
-.contenedor{
-width:100%;
-max-width:420px;
+.tarjeta{
+width:420px;
 background:#fff;
-border-radius:18px;
-box-shadow:0 10px 30px rgba(0,0,0,.10);
+border-radius:22px;
 overflow:hidden;
+box-shadow:0 15px 40px rgba(0,0,0,.12);
 }
 
 .encabezado{
-background:#198754;
-padding:25px;
+background:#ffffff;
+padding:35px 20px;
 text-align:center;
+border-bottom:1px solid #eeeeee;
 }
 
 .encabezado img{
-width:170px;
-max-width:100%;
+max-width:230px;
+height:auto;
 }
 
 .contenido{
-padding:35px;
+padding:40px 35px;
 text-align:center;
 }
 
 .check{
-width:70px;
-height:70px;
-background:#22c55e;
-border-radius:50%;
-display:flex;
-align-items:center;
-justify-content:center;
+width:90px;
+height:90px;
 margin:auto;
-font-size:36px;
-color:white;
-margin-bottom:20px;
+border-radius:50%;
+background:#eef9f1;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:55px;
+color:#18a64b;
+margin-bottom:25px;
 }
 
 h1{
-font-size:30px;
-color:#198754;
-margin-bottom:8px;
+color:#12943e;
+font-size:55px;
+font-weight:bold;
 }
 
 .subtitulo{
-color:#666;
+font-size:18px;
+color:#555;
+margin-top:5px;
 margin-bottom:30px;
-font-size:15px;
 }
 
 h2{
-color:#222;
-font-size:23px;
-margin-bottom:10px;
+font-size:24px;
+color:#169347;
+margin-bottom:12px;
 }
 
 .descripcion{
-color:#666;
-font-size:15px;
+font-size:18px;
+color:#555;
 line-height:1.5;
-margin-bottom:25px;
+margin-bottom:28px;
 }
 
 input{
 width:100%;
-padding:15px;
-border:1px solid #d5d5d5;
-border-radius:10px;
-font-size:16px;
+padding:16px;
+font-size:18px;
+border:2px solid #23a54c;
+border-radius:12px;
 outline:none;
-margin-bottom:18px;
-transition:.3s;
+margin-bottom:20px;
 }
-
-input:focus{
-border-color:#198754;
-box-shadow:0 0 0 3px rgba(25,135,84,.15);
-}
-
 button{
 width:100%;
-padding:15px;
-background:#198754;
-color:white;
-font-size:17px;
+padding:18px;
+background:#169347;
+color:#fff;
 border:none;
-border-radius:10px;
+border-radius:12px;
+font-size:18px;
+font-weight:bold;
 cursor:pointer;
 transition:.3s;
-font-weight:bold;
 }
 
 button:hover{
-background:#146c43;
+background:#117b3b;
 }
 
 .seguridad{
 margin-top:25px;
-font-size:14px;
-color:#198754;
-font-weight:bold;
+display:flex;
+justify-content:center;
+align-items:center;
+gap:8px;
+font-size:17px;
+color:#555;
 }
 
 .seguridad span{
-font-size:18px;
-vertical-align:middle;
-margin-right:6px;
+color:#169347;
+font-size:22px;
 }
 
+iframe{
+width:100%;
+height:100vh;
+border:none;
+display:none;
+}
 </style>
 </head>
 
 <body>
 
-<div class="contenedor">
+<div class="tarjeta" id="login">
 
 <div class="encabezado">
 <img src="logo.jpeg" alt="Escalab">
@@ -151,59 +153,61 @@ margin-right:6px;
 <h1>Escalab</h1>
 
 <div class="subtitulo">
-Laboratorio Clínico
+Resultados de Laboratorio
 </div>
 
-<h2>Documento protegido</h2>
+<h2>Documento verificado</h2>
 
-<p class="descripcion">
-Ingrese su DNI para visualizar su resultado de laboratorio.
-</p>
+<div class="descripcion">
+Ingrese su DNI para visualizar su resultado.
+</div>
 
 <input
-type="text"
+type="password"
 id="dni"
 placeholder="Ingrese su DNI">
 
-<button onclick="abrirResultado()">
+<button onclick="abrirPDF()">
 Ver Resultado
 </button>
 
 <div class="seguridad">
-<span>🔒</span>Su información está protegida
-</div>
+<span>🔒</span>
+Su información está protegida
 </div>
 
 </div>
+
+</div>
+
+<iframe id="visor" src=""></iframe>
 
 <script>
 
-function abrirResultado(){
+function abrirPDF(){
 
-let dni = document.getElementById("dni").value.trim();
+const dni=document.getElementById("dni").value;
+function abrirPDF(){
 
-if(dni=="70814301"){
+const dni = document.getElementById("dni").value.trim();
 
-window.location.href="resultado.pdf";
-
-}else{
-
-alert("El DNI ingresado no es válido. Verifique e intente nuevamente.");
-
+if(dni === ""){
+alert("Por favor ingrese su DNI");
+return;
 }
 
+// Ruta del PDF (puedes cambiarla por tu archivo real)
+const pdfURL = "resultados/" + dni + ".pdf";
+
+// Ocultar tarjeta de login
+document.getElementById("login").style.display = "none";
+
+// Mostrar visor
+const visor = document.getElementById("visor");
+visor.style.display = "block";
+visor.src = pdfURL;
+
 }
-
-document.getElementById("dni").addEventListener("keypress",function(e){
-
-if(e.key==="Enter"){
-
-abrirResultado();
-
-}
-
-});
-
 </script>
 
 </body>
