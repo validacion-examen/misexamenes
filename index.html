@@ -29,6 +29,18 @@ background:#fff;
 border-radius:22px;
 overflow:hidden;
 box-shadow:0 18px 45px rgba(0,0,0,.12);
+animation:aparecer .4s ease;
+}
+
+@keyframes aparecer{
+from{
+opacity:0;
+transform:translateY(20px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
 }
 
 .encabezado{
@@ -39,46 +51,45 @@ border-bottom:1px solid #eee;
 
 .encabezado img{
 max-width:220px;
+height:auto;
 }
 
-/* CHECK */
-.check{
-width:90px;
-height:90px;
-margin:auto;
-border-radius:50%;
-background:#eafaf0;
-display:flex;
-justify-content:center;
-align-items:center;
-margin-bottom:20px;
-}
-
-/* CONTENIDO */
 .contenido{
 padding:35px;
 text-align:center;
 }
 
+.check{
+width:90px;
+height:90px;
+margin:0 auto 20px;
+border-radius:50%;
+background:#eafaf0;
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
 h1{
 color:#12943e;
-font-size:50px;
+font-size:34px;
+margin-bottom:10px;
 }
 
 .subtitulo{
 color:#666;
-margin:8px 0 25px;
+margin-bottom:20px;
 }
 
 h2{
 color:#169347;
-margin-bottom:10px;
+margin-bottom:12px;
 }
 
 .descripcion{
 color:#666;
-margin-bottom:25px;
 line-height:1.5;
+margin-bottom:25px;
 }
 
 input{
@@ -89,6 +100,12 @@ border-radius:12px;
 font-size:16px;
 outline:none;
 margin-bottom:15px;
+transition:.3s;
+}
+
+input:focus{
+border-color:#12943e;
+box-shadow:0 0 8px rgba(18,148,62,.2);
 }
 
 button{
@@ -132,6 +149,14 @@ border:none;
 display:none;
 }
 
+footer{
+padding:18px;
+text-align:center;
+font-size:13px;
+color:#888;
+border-top:1px solid #eee;
+}
+
 </style>
 </head>
 
@@ -140,13 +165,13 @@ display:none;
 <div class="tarjeta" id="login">
 
 <div class="encabezado">
-<img src="logo.webp" alt="Escalabs">
+<img src="logo.jpeg" alt="Escalabs">
 </div>
 
 <div class="contenido">
 
-<!-- CHECK -->
-<h1>Escalabs</h1>
+<div class="check">
+
 <svg viewBox="0 0 24 24" width="52" height="52">
 <path d="M5 13l4 4L19 7"
 fill="none"
@@ -155,11 +180,14 @@ stroke-width="3"
 stroke-linecap="round"
 stroke-linejoin="round"/>
 </svg>
+
 </div>
 
-<div class="check">
+<h1>Escalabs</h1>
 
-<div class="subtitulo">Resultados de Laboratorio</div>
+<div class="subtitulo">
+Resultados de Laboratorio
+</div>
 
 <h2>Documento verificado</h2>
 
@@ -167,64 +195,115 @@ stroke-linejoin="round"/>
 Ingrese su DNI para visualizar su resultado.
 </div>
 
-<input type="password" id="dni" placeholder="Ingrese su DNI" maxlength="8">
+<input
+type="password"
+id="dni"
+placeholder="Ingrese su DNI"
+maxlength="8">
 
-<button onclick="abrirPDF()">Ver Resultado</button>
+<button onclick="abrirPDF()">
+Ver Resultado
+</button>
 
 <div class="error" id="error"></div>
 
 <div class="seguridad">
-<svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-stroke="#169347" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+
+<svg
+width="18"
+height="18"
+viewBox="0 0 24 24"
+fill="none"
+stroke="#169347"
+stroke-width="2"
+stroke-linecap="round"
+stroke-linejoin="round">
+
 <rect x="5" y="11" width="14" height="10" rx="2"></rect>
+
 <path d="M8 11V7a4 4 0 0 1 8 0v4"></path>
+
 </svg>
+
 Su información está protegida
+
 </div>
 
 </div>
+
+<footer>
+
+© Escalabs - Resultados en línea
+
+</footer>
+
 </div>
 
 <iframe id="visor"></iframe>
 
 <script>
 
-document.getElementById("dni").addEventListener("keydown", function(event){
-if(event.key === "Enter"){
+document.getElementById("dni").addEventListener("keydown",function(e){
+
+if(e.key==="Enter"){
+
 abrirPDF();
+
 }
+
 });
 
 function abrirPDF(){
 
-const dni = document.getElementById("dni").value.trim();
-const error = document.getElementById("error");
+const dni=document.getElementById("dni").value.trim();
 
-error.style.display = "none";
+const error=document.getElementById("error");
 
-/* VALIDACIÓN BÁSICA */
-if(dni.length !== 8){
-error.textContent = "El DNI debe tener 8 dígitos";
-error.style.display = "block";
+error.style.display="none";
+
+if(!/^[0-9]{8}$/.test(dni)){
+
+error.textContent="Ingrese un DNI válido de 8 dígitos";
+
+error.style.display="block";
+
 return;
+
 }
-
-/* DNI AUTORIZADO */
-const dniValido = "70814301";
-
-if(dni !== dniValido){
-error.textContent = "DNI no encontrado";
-error.style.display = "block";
-return;
-}
-
-/* ABRIR PDF */
-const pdfURL = "resultados/" + dniValido + ".pdf";
-
-document.getElementById("login").style.display = "none";
+const pdfURL = "resultados/" + dni + ".pdf";
 
 const visor = document.getElementById("visor");
-visor.style.display = "block";
-visor.src = pdfURL;
+
+/* Verifica si el PDF existe */
+fetch(pdfURL,{method:"HEAD"})
+.then(function(res){
+
+if(!res.ok){
+
+throw new Error();
 
 }
+
+/* Oculta la tarjeta */
+document.getElementById("login").style.display="none";
+
+/* Muestra el PDF */
+visor.style.display="block";
+visor.src=pdfURL;
+
+})
+
+.catch(function(){
+
+error.textContent="No se encontró un resultado para ese DNI.";
+
+error.style.display="block";
+
+});
+
+}
+
+</script>
+
+</body>
+</html>
