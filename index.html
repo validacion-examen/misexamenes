@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mis Resultados</title>
+<title>Escalab | Resultados</title>
 
 <style>
 
@@ -11,71 +11,96 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Arial, Helvetica, sans-serif;
+font-family:Arial,Helvetica,sans-serif;
 }
 
 body{
-background:#eef7f1;
+background:#eef8f2;
 display:flex;
 justify-content:center;
 align-items:center;
 height:100vh;
+padding:20px;
 }
 
 .contenedor{
-width:380px;
-background:white;
-padding:35px;
+width:100%;
+max-width:420px;
+background:#fff;
 border-radius:18px;
-box-shadow:0 8px 25px rgba(0,0,0,.15);
+box-shadow:0 10px 30px rgba(0,0,0,.10);
+overflow:hidden;
+}
+
+.encabezado{
+background:#198754;
+padding:25px;
 text-align:center;
 }
 
-.logo{
-width:90px;
-margin-bottom:15px;
+.encabezado img{
+width:170px;
+max-width:100%;
+}
+
+.contenido{
+padding:35px;
+text-align:center;
+}
+
+.check{
+width:70px;
+height:70px;
+background:#22c55e;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+margin:auto;
+font-size:36px;
+color:white;
+margin-bottom:20px;
 }
 
 h1{
-color:#198754;
 font-size:30px;
-margin-bottom:5px;
+color:#198754;
+margin-bottom:8px;
 }
 
 .subtitulo{
 color:#666;
 margin-bottom:30px;
-}
-
-.tarjeta{
-border:1px solid #d8e7dc;
-border-radius:15px;
-padding:25px;
-background:#fafdfb;
-}
-
-.icono{
-font-size:50px;
-margin-bottom:15px;
+font-size:15px;
 }
 
 h2{
-color:#198754;
+color:#222;
+font-size:23px;
 margin-bottom:10px;
 }
 
-p{
-color:#555;
-margin-bottom:20px;
+.descripcion{
+color:#666;
+font-size:15px;
+line-height:1.5;
+margin-bottom:25px;
 }
 
 input{
 width:100%;
-padding:14px;
-border:1px solid #ccc;
+padding:15px;
+border:1px solid #d5d5d5;
 border-radius:10px;
 font-size:16px;
-margin-bottom:20px;
+outline:none;
+margin-bottom:18px;
+transition:.3s;
+}
+
+input:focus{
+border-color:#198754;
+box-shadow:0 0 0 3px rgba(25,135,84,.15);
 }
 
 button{
@@ -83,60 +108,70 @@ width:100%;
 padding:15px;
 background:#198754;
 color:white;
+font-size:17px;
 border:none;
 border-radius:10px;
-font-size:17px;
 cursor:pointer;
 transition:.3s;
+font-weight:bold;
 }
 
 button:hover{
 background:#146c43;
 }
 
-.seguro{
-margin-top:20px;
-color:#888;
+.seguridad{
+margin-top:25px;
 font-size:14px;
+color:#198754;
+font-weight:bold;
+}
+
+.seguridad span{
+font-size:18px;
+vertical-align:middle;
+margin-right:6px;
 }
 
 </style>
-
 </head>
 
 <body>
 
 <div class="contenedor">
 
-<img src="logo.jpeg" class="logo">
+<div class="encabezado">
+<img src="logo.jpeg" alt="Escalab">
+</div>
 
-<h1>Mis Resultados</h1>
+<div class="contenido">
+
+<div class="check">✓</div>
+
+<h1>Escalab</h1>
 
 <div class="subtitulo">
 Laboratorio Clínico
 </div>
 
-<div class="tarjeta">
-
-<div class="icono">🔒</div>
-
 <h2>Documento protegido</h2>
 
-<p>Ingrese la contraseña para visualizar su resultado.</p>
+<p class="descripcion">
+Ingrese su DNI para visualizar su resultado de laboratorio.
+</p>
 
 <input
-type="password"
-id="clave"
-placeholder="Ingrese su contraseña">
+type="text"
+id="dni"
+placeholder="Ingrese su DNI">
 
 <button onclick="abrirResultado()">
 Ver Resultado
 </button>
 
-<div class="seguro">
-🔐 Su información está protegida
+<div class="seguridad">
+<span>🔒</span>Su información está protegida
 </div>
-
 </div>
 
 </div>
@@ -145,15 +180,29 @@ Ver Resultado
 
 function abrirResultado(){
 
-let clave=document.getElementById("clave").value;
+let dni = document.getElementById("dni").value.trim();
 
-if(clave=="123456"){
+if(dni=="70814301"){
+
 window.location.href="resultado.pdf";
+
 }else{
-alert("Contraseña incorrecta");
+
+alert("El DNI ingresado no es válido. Verifique e intente nuevamente.");
+
 }
 
 }
+
+document.getElementById("dni").addEventListener("keypress",function(e){
+
+if(e.key==="Enter"){
+
+abrirResultado();
+
+}
+
+});
 
 </script>
 
